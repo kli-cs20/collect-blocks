@@ -9,8 +9,11 @@ let player = {
   y: 200,
   w: 25,
   h: 25,
-  speed: 5,
+  speed: 5
 }
+
+// Blocks
+let blocks = initBlocks(50);
 
 // Main Draw Loop
 window.addEventListener("load", draw);
@@ -18,21 +21,27 @@ window.addEventListener("load", draw);
 function draw() {
   // LOGIC
   movePlayer();
+  
 
   // DRAW
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, cnv.width, cnv.height)
-
-
-  ctx.strokeStyle = "white";
-  ctx.strokeRect(player.x, player.y, player.w, player.h);
-  
-  
+  background();
+  drawPlayer();
+  drawBlocks();
 
   requestAnimationFrame(draw);
 }
 
 // Helper Functions
+function background() {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, cnv.width, cnv.height)
+}
+
+function drawPlayer() {
+  ctx.strokeStyle = "white";
+  ctx.strokeRect(player.x, player.y, player.w, player.h);
+}
+
 function movePlayer() {
   if (keyPressed["ArrowUp"]) {
     player.y += -player.speed;
@@ -43,4 +52,36 @@ function movePlayer() {
   } else if (keyPressed["ArrowRight"]) {
     player.x += player.speed;
   }
+}
+
+// Initialize an array with n random blocks
+function initBlocks(n) {
+  let temp = [];
+  for (let num = 1; num <= n; num++) {
+    temp.push(newRandomBlock());
+  }
+  return temp;
+}
+
+// Return a random block
+function newRandomBlock() {
+  return {
+    x: Math.random() * cnv.width,
+    y: Math.random() * cnv.height,
+    w: 15,
+    h: 15,
+  }
+}
+
+// Draw all blocks
+function drawBlocks() {
+  ctx.fillStyle = "green";
+  for (let i = 0; i <= blocks.length; i++) {
+    drawBlock(blocks[i]);
+  }
+}
+
+// Draw a single block
+function drawBlock(block) {
+  ctx.fillRect(block.x, block.y, block.w, block.h)
 }
