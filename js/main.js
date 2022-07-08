@@ -21,7 +21,7 @@ window.addEventListener("load", draw);
 function draw() {
   // LOGIC
   movePlayer();
-  
+  eatBlocks();
 
   // DRAW
   background();
@@ -47,7 +47,9 @@ function movePlayer() {
     player.y += -player.speed;
   } else if (keyPressed["ArrowDown"]) {
     player.y += player.speed;
-  } else if (keyPressed["ArrowLeft"]) {
+  }
+  
+  if (keyPressed["ArrowLeft"]) {
     player.x += -player.speed;
   } else if (keyPressed["ArrowRight"]) {
     player.x += player.speed;
@@ -76,12 +78,22 @@ function newRandomBlock() {
 // Draw all blocks
 function drawBlocks() {
   ctx.fillStyle = "green";
-  for (let i = 0; i <= blocks.length; i++) {
+  for (let i = 0; i < blocks.length; i++) {
     drawBlock(blocks[i]);
   }
 }
 
 // Draw a single block
 function drawBlock(block) {
-  ctx.fillRect(block.x, block.y, block.w, block.h)
+  ctx.fillRect(block.x, block.y, block.w, block.h);
+}
+
+// Check if player beside any blocks
+function eatBlocks() {
+  for (let i = 0; i < blocks.length; i++) {
+    if (rectCollide(player, blocks[i])) {
+      blocks.splice(i, 1);
+      break;
+    }
+  }
 }
